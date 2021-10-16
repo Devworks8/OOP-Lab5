@@ -1,0 +1,7 @@
+D:\Repository\CSharp\GitRepo\OOP-Lab5\Lab5\bin\Debug\Lab5.exe.config
+D:\Repository\CSharp\GitRepo\OOP-Lab5\Lab5\bin\Debug\Lab5.exe
+D:\Repository\CSharp\GitRepo\OOP-Lab5\Lab5\bin\Debug\Lab5.pdb
+D:\Repository\CSharp\GitRepo\OOP-Lab5\Lab5\obj\Debug\Lab5.csproj.AssemblyReference.cache
+D:\Repository\CSharp\GitRepo\OOP-Lab5\Lab5\obj\Debug\Lab5.csproj.CoreCompileInputs.cache
+D:\Repository\CSharp\GitRepo\OOP-Lab5\Lab5\obj\Debug\Lab5.exe
+D:\Repository\CSharp\GitRepo\OOP-Lab5\Lab5\obj\Debug\Lab5.pdb

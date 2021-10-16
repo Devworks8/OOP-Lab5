@@ -30,9 +30,80 @@ namespace Psim
 			Sensor s2 = new Sensor(2, silicon, 300);
 			Cell c2 = new Cell(1, 1, s2);
 
-			// Test transition surface (HandlePhonon)
-			// Test emit surface (HandlePhonon)
+			Phonon p1 = new Phonon(1);
+			p1.SetCoords(2, 2);
+			p1.SetDirection(0, 1);
+			p1.DriftTime = 1;
+			p1.Update(1, 10, Polarization.LA);
 
+            // Test transition surface (HandlePhonon)
+            Console.WriteLine("Transitory tests\n");
+			
+			c1.AddPhonon(p1);
+
+            //1 phonon in cell 1
+            Console.WriteLine(c1);
+
+			c1.SetTransitionSurface(SurfaceLocation.top, c2);
+			c1.GetSurface((SurfaceLocation)c1.MoveToNearestSurface(p1)).HandlePhonon(p1);
+			
+			//1 incoming phonon in cell 2
+			Console.WriteLine(c2);
+
+			c2.MergeIncPhonons();
+			c1.Phonons.Remove(p1);
+			
+			//1 phonon in cell 2
+            Console.WriteLine(c2);
+
+			//Move and transition a phonon from cell 1 to cell 2 using the bottom transitory surface
+			p1.SetDirection(0, -1);
+			p1.DriftTime = 1;
+			p1.Update(1, 10, Polarization.LA);
+
+			c2.SetTransitionSurface(SurfaceLocation.bot, c1);
+			c2.GetSurface((SurfaceLocation)c2.MoveToNearestSurface(p1)).HandlePhonon(p1);
+
+			//1 incoming phonon in cell 1
+			Console.WriteLine(c1);
+
+			c1.MergeIncPhonons();
+
+			//1 phonon in cell 1
+			Console.WriteLine(c1);
+
+			//Move a phonon to a boundary surface
+			p1.SetDirection(1, 0);
+			p1.DriftTime = 1;
+			p1.Update(1, 10, Polarization.LA);
+
+			c1.GetSurface((SurfaceLocation)c1.MoveToNearestSurface(p1)).HandlePhonon(p1);
+
+			//1 phonon in cell 1
+			Console.WriteLine(c1);
+
+            // Test emit surface (HandlePhonon)
+
+            Console.WriteLine("\nEmission test\n");
+			//Move a phonon to an emitting surface
+			p1.SetCoords(2, 2);
+			p1.SetDirection(-1, 0);
+			p1.DriftTime = 1;
+			p1.Update(1, 10, Polarization.LA);
+
+            Console.WriteLine("Phonon active: {0}", p1.Active);
+
+			c1.SetEmitSurface(SurfaceLocation.left, c1, 300);
+			c1.SetEmitPhonons(290, 300, 0.01);
+
+			if (!(c1.MoveToNearestSurface(p1) is null))
+			{
+				c1.GetSurface((SurfaceLocation)c1.MoveToNearestSurface(p1)).HandlePhonon(p1);
+			}
+
+			Console.WriteLine("Phonon active: {0}", p1.Active);
+
+			Console.ReadKey(true);
 		}
 	}
 }

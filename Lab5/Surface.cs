@@ -59,7 +59,7 @@ namespace Psim.ModelComponents
 
 	public class TransitionSurface : BoundarySurface
 	{
-		//TODO: Implement constructor
+		public TransitionSurface(SurfaceLocation location, Cell cell) : base(location, cell) { }
 
 		/// <summary>
 		/// When a phonon collides with a transition surface, it passes from
@@ -70,8 +70,27 @@ namespace Psim.ModelComponents
 		/// <returns>The new cell in which the phonon will reside</returns>
 		public override Cell HandlePhonon(Phonon p)
 		{
-			//TODO: Implement
-			throw new NotImplementedException();
+			p.GetCoords(out double px, out double py);
+
+			if(Location is SurfaceLocation.top) 
+			{
+				p.SetCoords(px, 0);
+			}
+			if(Location is SurfaceLocation.right)
+            {
+				p.SetCoords(0, py);
+			}
+			if (Location is SurfaceLocation.bot)
+			{
+				p.SetCoords(px, cell.Width);
+			}
+			if (Location is SurfaceLocation.left)
+			{
+				p.SetCoords(cell.Length, py);
+			}
+
+			cell.AddIncPhonon(p);
+			return cell;
 		}
 	}
 
@@ -96,8 +115,10 @@ namespace Psim.ModelComponents
 		/// <returns>The cell the phonon resided in prior to being removed from the simulation</returns>
 		public override Cell HandlePhonon(Phonon p)
 		{
-			// TODO: implement
-			throw new NotImplementedException();
+			p.DriftTime = 0;
+			p.Active = false;
+
+			return cell;
 		}
 		public double GetEmitEnergy(double tEq, double simTime, double length)
 		{
@@ -114,9 +135,9 @@ namespace Psim.ModelComponents
 		public void SetEmitPhonons(double tEq, double effEnergy, double timeStep, double length)
 		{
 			double emitPhonons = GetEmitEnergy(tEq, timeStep, length) / effEnergy;
-			//TODO: Implement -> need to split the double emitPhonons into it's
-			// integer component (EmitPhonons) and its
-			// fractional component (EmitPhononsFrac)
+
+			EmitPhonons = (int)Math.Floor(emitPhonons);
+			EmitPhononsFrac = emitPhonons - EmitPhonons;
 		}
 
 	}
